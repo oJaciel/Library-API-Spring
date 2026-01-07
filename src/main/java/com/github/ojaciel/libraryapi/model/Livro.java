@@ -3,6 +3,7 @@ package com.github.ojaciel.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class Livro {
     private GeneroLivro genero;
 
     @Column(name = "preco", precision = 18, scale = 2, nullable = false)
-    private Double preco;
+    private BigDecimal preco;
 
     @ManyToOne //Muitos livros, para um autor
     @JoinColumn(name = "id_autor")
