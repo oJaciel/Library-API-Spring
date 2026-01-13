@@ -1,11 +1,15 @@
 package com.github.ojaciel.libraryapi.repository;
 
 import com.github.ojaciel.libraryapi.model.Autor;
+import com.github.ojaciel.libraryapi.model.GeneroLivro;
+import com.github.ojaciel.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +18,9 @@ import java.util.UUID;
 public class AutorRepositoryTest {
     @Autowired
     AutorRepository repository;
+
+    @Autowired
+    LivroRepository livroRepository;
 
     @Test
     public void salvarTest() {
@@ -67,5 +74,37 @@ public class AutorRepositoryTest {
         var id = UUID.fromString("338ee841-a58d-4ce9-aaa2-b74c034983e3");
         var autor = repository.findById(id).get();
         repository.delete(autor);
+    }
+
+    @Test
+    void salvarAutorComLivrosTest() {
+        Autor autor = new Autor();
+        autor.setNome("Lovecraft");
+        autor.setNacionalidade("Americano");
+        autor.setDataNascimento(LocalDate.of(1917, 8, 2));
+
+        Livro livro = new Livro();
+        livro.setIsbn("8941154-15115");
+        livro.setPreco(BigDecimal.valueOf(70));
+        livro.setGenero(GeneroLivro.MISTERIO);
+        livro.setTitulo("Chamado de Cthulhu");
+        livro.setDataPublicacao(LocalDate.of(1940, 9, 6));
+        livro.setAutor(autor);
+
+        Livro livro2 = new Livro();
+        livro2.setIsbn("1511-98451");
+        livro2.setPreco(BigDecimal.valueOf(40));
+        livro2.setGenero(GeneroLivro.MISTERIO);
+        livro2.setTitulo("A Cor que Caiu do Céu");
+        livro2.setDataPublicacao(LocalDate.of(1938, 9, 6));
+        livro2.setAutor(autor);
+
+        autor.setLivros(new ArrayList<>());
+        autor.getLivros().add(livro);
+        autor.getLivros().add(livro2);
+
+        repository.save(autor);
+
+        //livroRepository.saveAll(autor.getLivros());
     }
 }
