@@ -6,6 +6,7 @@ import com.github.ojaciel.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -127,5 +128,29 @@ class LivroRepositoryTest {
         String tituloPesquisa = "A Cor que Caiu do Céu";
         List<Livro> lista = repository.findByTituloAndPreco(tituloPesquisa, preco);
         lista.forEach(System.out::println);
+    }
+
+    @Test
+    void listarLivrosComQueryJPQL() {
+        var resultado = repository.listarTodosOrdenadoPorTituloEPreco();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarAutoresDosLivrosComQueryJPQL() {
+        var resultado = repository.listarAutoresDosLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarTitulosNaoRepetidosDosLivros() {
+        var resultado = repository.listarNomesDiferentesLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarGenerosDeAutoresBrasileiros() {
+        var resultado = repository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
     }
 }

@@ -3,6 +3,7 @@ package com.github.ojaciel.libraryapi.repository;
 import com.github.ojaciel.libraryapi.model.Autor;
 import com.github.ojaciel.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,4 +25,27 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     //SELECT * FROM livro WHERE titulo = titulo or isbn = isbn
     List<Livro> findByTituloOrIsbn(String Titulo, String isbn);
+
+    //Query JPQL (referencia as entidades e propriedades da entidade)
+
+    //SELECT l.* FROM livro as l ORDER BY l.titulo
+    @Query("SELECT l FROM Livro AS l ORDER BY l.titulo, l.preco")
+    List<Livro> listarTodosOrdenadoPorTituloEPreco();
+
+    //SELECT a.* FROM livro l JOIN autor a on a.id = l.id_autor
+    @Query("SELECT a from Livro l JOIN l.autor a")
+    List<Autor> listarAutoresDosLivros();
+
+    //SELECT DISTINCT l.titulo FROM livro
+    @Query("SELECT DISTINCT l.titulo FROM Livro l")
+    List<String> listarNomesDiferentesLivros();
+
+    @Query("""
+            SELECT DISTINCT l.genero
+            FROM Livro l
+            JOIN l.autor a
+            WHERE a.nacionalidade = 'Brasileira'
+            ORDER BY l.genero
+            """)
+    List<String> listarGenerosAutoresBrasileiros();
 }
