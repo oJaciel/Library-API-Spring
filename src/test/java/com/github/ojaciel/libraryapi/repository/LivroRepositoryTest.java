@@ -153,4 +153,16 @@ class LivroRepositoryTest {
         var resultado = repository.listarGenerosAutoresBrasileiros();
         resultado.forEach(System.out::println);
     }
+
+    @Test
+    void listarPorGeneroNamedParam() {
+        var resultado = repository.findByGenero(GeneroLivro.MISTERIO);
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarPorGeneroPositionalParam() {
+        var resultado = repository.findByGeneroPositionalParams(GeneroLivro.MISTERIO);
+        resultado.forEach(System.out::println);
+    }
 }
