@@ -4,10 +4,13 @@ import com.github.ojaciel.libraryapi.model.Autor;
 import com.github.ojaciel.libraryapi.model.GeneroLivro;
 import com.github.ojaciel.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,4 +61,14 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     //Positional parameters
     @Query("SELECT l FROM Livro l WHERE l.genero = ?1")
     List<Livro> findByGeneroPositionalParams(GeneroLivro generoLivro);
+
+    @Modifying //Significa que está modificando registros no banco
+    @Transactional //Também precisa quando fizer update / delete / insert
+    @Query("DELETE FROM Livro WHERE genero = ?1")
+    void deleteByGenero(GeneroLivro genero);
+
+    @Modifying //Significa que está modificando registros no banco
+    @Transactional //Também precisa quando fizer update / delete / insert
+    @Query("UPDATE Livro SET dataPublicacao = ?1")
+    void updateDataPublicacao(LocalDate novaData);
 }
