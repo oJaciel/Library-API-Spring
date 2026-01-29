@@ -1,8 +1,12 @@
 package com.github.ojaciel.libraryapi.service;
 
+import com.github.ojaciel.libraryapi.controller.dto.AutorDTO;
 import com.github.ojaciel.libraryapi.model.Autor;
 import com.github.ojaciel.libraryapi.repository.AutorRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AutorService {
@@ -15,6 +19,10 @@ public class AutorService {
 
     public Autor salvar(Autor autor) {
         return repository.save(autor);
+    }
+
+    public Optional<Autor> obterPorId(UUID id) {
+        return repository.findById(id);
     }
 }
 
