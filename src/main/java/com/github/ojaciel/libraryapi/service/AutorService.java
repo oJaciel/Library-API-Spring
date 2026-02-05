@@ -5,6 +5,7 @@ import com.github.ojaciel.libraryapi.model.Autor;
 import com.github.ojaciel.libraryapi.repository.AutorRepository;
 import com.github.ojaciel.libraryapi.repository.LivroRepository;
 import com.github.ojaciel.libraryapi.validator.AutorValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,18 +13,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor //Funciona para gerar automaticamente construtor dos campos final
 public class AutorService {
 
     private final AutorRepository repository;
     private final LivroRepository livroRepository;
     private final AutorValidator validator;
-
-    public AutorService(AutorRepository repository, AutorValidator validator, LivroRepository livroRepository) {
-        this.repository = repository;
-        this.livroRepository = livroRepository;
-        this.validator = validator;
-
-    }
 
     public Autor salvar(Autor autor) {
         validator.validar(autor);
