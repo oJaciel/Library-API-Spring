@@ -1,8 +1,9 @@
 package com.github.ojaciel.libraryapi.service;
 
-import com.github.ojaciel.libraryapi.controller.dto.AutorDTO;
+import com.github.ojaciel.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.github.ojaciel.libraryapi.model.Autor;
 import com.github.ojaciel.libraryapi.repository.AutorRepository;
+import com.github.ojaciel.libraryapi.repository.LivroRepository;
 import com.github.ojaciel.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,14 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository repository;
+    private final LivroRepository livroRepository;
     private final AutorValidator validator;
 
-    public AutorService(AutorRepository repository, AutorValidator validator) {
+    public AutorService(AutorRepository repository, AutorValidator validator, LivroRepository livroRepository) {
         this.repository = repository;
+        this.livroRepository = livroRepository;
         this.validator = validator;
+
     }
 
     public Autor salvar(Autor autor) {
@@ -39,6 +43,9 @@ public class AutorService {
     }
 
     public void deletar(Autor autor) {
+        if (possuiLivro(autor)) {
+            throw new OperacaoNaoPermitidaException("Não é permitido excluir um autor que possui livros cadastrados!");
+        }
         repository.delete(autor);
     }
 
@@ -56,6 +63,11 @@ public class AutorService {
         }
 
         return repository.findAll();
+    }
+
+    //Valida se o autor possui livros cadastrados
+    public boolean possuiLivro(Autor autor) {
+        return livroRepository.existsByAutor(autor);
     }
 }
 
