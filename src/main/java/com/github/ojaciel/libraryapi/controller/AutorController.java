@@ -2,6 +2,7 @@ package com.github.ojaciel.libraryapi.controller;
 
 import com.github.ojaciel.libraryapi.controller.dto.AutorDTO;
 import com.github.ojaciel.libraryapi.controller.dto.ErroResposta;
+import com.github.ojaciel.libraryapi.controller.mappers.AutorMapper;
 import com.github.ojaciel.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.github.ojaciel.libraryapi.exceptions.RegistroDuplicadoException;
 import com.github.ojaciel.libraryapi.model.Autor;
@@ -26,16 +27,17 @@ import java.util.stream.Collectors;
 public class AutorController {
 
     private final AutorService service;
+    private final AutorMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO dto) {
         try {
-            Autor autorEntidade = autor.mapearParaAutor();
-            service.salvar(autorEntidade);
+            Autor autor = mapper.toEntity(dto);
+            service.salvar(autor);
 
             //htp://localhost:8080/autores/id
             URI location =
-                    ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
+                    ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autor.getId()).toUri();
 
             return ResponseEntity.created(location).build();
         } catch (RegistroDuplicadoException e) {
@@ -51,7 +53,7 @@ public class AutorController {
 
         if (autorOptional.isPresent()) {
             Autor autor = autorOptional.get();
-            AutorDTO dto = new AutorDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade());
+            AutorDTO dto = mapper.toDTO(autor);
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.notFound().build();
@@ -79,11 +81,8 @@ public class AutorController {
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {
         List<Autor> resultado = service.pesquisaByExample(nome, nacionalidade);
-        List<AutorDTO> lista = resultado.stream().map(autor -> new AutorDTO(autor.getId(),
-                autor.getNome(),
-                autor.getDataNascimento(),
-                autor.getNacionalidade()
-        )).collect(Collectors.toList());
+        List<AutorDTO> lista = resultado.stream().map(mapper::toDTO
+        ).collect(Collectors.toList());
 
         return ResponseEntity.ok(lista);
     }

@@ -2,7 +2,9 @@ package com.github.ojaciel.libraryapi.controller;
 
 import com.github.ojaciel.libraryapi.controller.dto.CadastroLivroDTO;
 import com.github.ojaciel.libraryapi.controller.dto.ErroResposta;
+import com.github.ojaciel.libraryapi.controller.mappers.LivroMapper;
 import com.github.ojaciel.libraryapi.exceptions.RegistroDuplicadoException;
+import com.github.ojaciel.libraryapi.model.Livro;
 import com.github.ojaciel.libraryapi.service.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class LivroController {
 
     private LivroService service;
+    private final LivroMapper mapper;
 
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody @Valid CadastroLivroDTO dto) {
         try {
             //Mapear DTO para Entidade
+            Livro livro = mapper.toEntity(dto);
 
             //Enviar a entidade para o Service validar e salvar
 
@@ -30,7 +34,7 @@ public class LivroController {
 
             //Retornar código CREATED com header location
 
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(livro);
         } catch (RegistroDuplicadoException e) {
             var erroDto = ErroResposta.conflito(e.getMessage());
             return ResponseEntity.status(erroDto.status()).body(erroDto);
