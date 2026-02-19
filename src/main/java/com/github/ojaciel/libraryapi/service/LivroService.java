@@ -40,7 +40,7 @@ public class LivroService {
     public List<Livro> pesquisa(String isbn, String titulo, String nomeAutor, GeneroLivro genero, Integer anoPublicacao) {
         Specification<Livro> specs = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
 
-        if (isbn !=null) {
+        if (isbn != null) {
             specs = specs.and(LivroSpecs.isbnEqual(isbn));
         }
 
@@ -61,5 +61,13 @@ public class LivroService {
         }
 
         return repository.findAll(specs);
+    }
+
+    public void atualizar(Livro livro) {
+        if (livro.getId() == null) {
+            throw new IllegalArgumentException("Para atualizar, é necessário que o livro esteja salvo na base!");
+        }
+
+        repository.save(livro);
     }
 }
