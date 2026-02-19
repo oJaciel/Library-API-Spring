@@ -37,7 +37,7 @@ public class Livro {
     @Column(name = "genero", length = 30, nullable = false)
     private GeneroLivro genero;
 
-    @Column(name = "preco", precision = 18, scale = 2, nullable = false)
+    @Column(name = "preco", precision = 18, scale = 2, nullable = true)
     private BigDecimal preco;
 
     //@ManyToOne(cascade = CascadeType.ALL) //Muitos livros, para um autor

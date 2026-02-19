@@ -7,6 +7,7 @@ import com.github.ojaciel.libraryapi.model.GeneroLivro;
 import com.github.ojaciel.libraryapi.model.Livro;
 import com.github.ojaciel.libraryapi.repository.LivroRepository;
 import com.github.ojaciel.libraryapi.repository.specs.LivroSpecs;
+import com.github.ojaciel.libraryapi.validator.LivroValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,8 +25,10 @@ import java.util.UUID;
 public class LivroService {
 
     private final LivroRepository repository;
+    private final LivroValidator validator;
 
     public Livro salvar(Livro livro) {
+        validator.validar(livro);
         return repository.save(livro);
     }
 
@@ -68,6 +71,7 @@ public class LivroService {
             throw new IllegalArgumentException("Para atualizar, é necessário que o livro esteja salvo na base!");
         }
 
+        validator.validar(livro);
         repository.save(livro);
     }
 }

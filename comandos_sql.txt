@@ -14,7 +14,7 @@ CREATE TABLE livro(
 	titulo VARCHAR(150) NOT NULL,
 	data_publicacao DATE NOT NULL,
 	genero VARCHAR(30) NOT NULL,
-	preco NUMERIC(18,2) NOT NULL,
+	preco NUMERIC(18,2),
 	data_cadastro timestamp,
     data_atualizacao timestamp,
     id_usuario uuid,
