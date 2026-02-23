@@ -3,6 +3,7 @@ package com.github.ojaciel.libraryapi.repository;
 import com.github.ojaciel.libraryapi.model.Autor;
 import com.github.ojaciel.libraryapi.model.GeneroLivro;
 import com.github.ojaciel.libraryapi.model.Livro;
+import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
