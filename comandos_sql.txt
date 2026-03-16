@@ -22,6 +22,13 @@ CREATE TABLE livro(
 	CONSTRAINT chk_genero CHECK (genero IN ('FICCAO', 'FANTASIA', 'MISTERIO', 'ROMANCE', 'BIOGRAFIA', 'CIENCIA'))
 );
 
+CREATE TABLE usuario (
+    id UUID NOT NULL PRIMARY KEY,
+    login VARCHAR(20) NOT NULL UNIQUE,
+    senha VARCHAR(300) NOT NULL,
+    roles VARCHAR[]
+);
+
 select l.titulo as titulo_livro, a.nome as nome_autor
 from livro as l
 join autor as a

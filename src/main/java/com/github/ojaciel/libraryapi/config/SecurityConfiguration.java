@@ -30,12 +30,17 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login").permitAll(); //Qualquer um pode acessar login, mesmo sem
                     // estar autenticado
+                    authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
+
+
 //                    authorize.requestMatchers(HttpMethod.POST, "/autores/**").hasRole("ADMIN"); //Somente admin pode acessar
 //                    authorize.requestMatchers(HttpMethod.DELETE, "/autores/**").hasRole("ADMIN"); //Somente admin pode
 //                    // acessar
 //                    authorize.requestMatchers(HttpMethod.PUT, "/autores/**").hasRole("ADMIN"); //Somente admin
 //                    // pode acessar
 //                    authorize.requestMatchers(HttpMethod.GET, "/autores/**").hasAnyRole("USER", "ADMIN"); //Admin e user pode acessar
+
+
                     authorize.requestMatchers("/autores/**").hasRole("ADMIN"); //Admin e user pode acessar
                     authorize.requestMatchers("/livros/**").hasAnyRole("USER", "ADMIN"); //Admin e user pode acessar
                     authorize.anyRequest().authenticated(); //Qualquer outra URL, que não seja mapeada, o usuário só
